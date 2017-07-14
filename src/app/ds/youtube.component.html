@@ -1,0 +1,22 @@
+
+
+    <!--Add buttons to initiate auth sequence and sign out-->
+    <div class="container-fluid">
+      <button id="authorize-button" style="display: none;" class='btn btn-primary btn-sm'>Authorize</button>
+      <button id="signout-button" style="display: none;" class='btn btn-danger btn-sm'>Sign Out</button>     
+      <img [src]="imgUrl"/>
+      <span>Welcome {{username}}, {{caption}}!</span>
+      <br/>
+      <input id='query' placeholder="search youtube"/>
+      <button id='search-button' class='btn btn-warning btn-sm' (click)='search()'>Search</button>
+      <br/><strong>Your uploads:</strong>
+      <div id="video-container"></div>
+      <strong>Your search results:</strong> 
+      <div id='search-container'></div>
+    </div>
+
+
+   <!--  <script async defer src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
+      onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script> -->

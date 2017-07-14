@@ -1,0 +1,33 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<h2>I am the almighty Root Module. Call Me AppModule! Looks like I have a root component: AppComponent</h2>
+<h3>AppComponent: Thanks for the intro Dad!I have about 3 items hosted inside me:A lazy-loaded child module called DSModule,a button and an input:</h3>
+<!-- <ds [name]='dsName.value'></ds> -->
+<div class="row">
+  <div class="col-12">
+    <nav>
+    <ul>
+      <li>
+      <a routerLink="ds" routerLinkActive="active">Click to activate the binding component(part of the DS Module)</a>
+    </li>
+    <li>
+    <a routerLink="ds/wiki"  routerLinkActive="active">Click to activate the wiki component (part of the DS Module)</a>
+  </li>
+    <li>
+    <a routerLink="ds/youtube"  routerLinkActive="active">Click to activate the youtube component (part of the DS Module)</a>
+  </li>
+  </ul>
+  </nav>
+    <router-outlet></router-outlet>
+</div>
+</div>
+<br/>
+<div class="row">
+  <div [class]="classList">
+    <button class="btn btn-primary" (click)="val='clicked';setName();">Click Me to see 1 way data binding</button>
+  </div>
+  <div [class]="classList">
+<input class="form-control" type="text" #dsName
+       placeholder="Enter a value to see 2 way data binding..."
+       [(ngModel)]="val" (keyup)="setName()">
+</div>
+</div>

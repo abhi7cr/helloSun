@@ -1,0 +1,7 @@
+<h4>{{title}} {{name}}!</h4>
+<p *ngIf="name !==''">
+  <ngb-alert [dismissible]="false" [type]="type">
+    <strong>{{type}}:</strong>
+    <span class="dosisFont">You just used {{type === 'info'? 1: 2}} way data binding!. Pssst.. You can unlock me by typing {{type === 'info'? 'clicked or pressing the button!': 'anything other than clicked'}}</span>
+  </ngb-alert>
+</p>

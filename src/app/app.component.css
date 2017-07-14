@@ -1,0 +1,15 @@
+:host /deep/ h4, h5, h6, h2, h3, button, input, p, div, span, strong{
+font-family:'Dosis', sans-serif;
+}
+
+:host /deep/ h2{
+  color:red;
+}
+
+:host /deep/ h3{
+  color:orange;
+}
+
+:host /deep/ .dosisFont{
+  font-family: 'Dosis', sans-serif;
+}
