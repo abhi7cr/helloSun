@@ -2,6 +2,7 @@ import { Component, Input, OnInit, OnChanges, AfterViewInit, ChangeDetectorRef }
 import { SharedService } from '../shared/shared.service';
 import {AppService} from '../app.service';
 import * as $ from 'jquery';
+import { WindowRef } from '../WindowRef';
 declare var gapi: any;
 @Component({
   selector: 'youtube',
@@ -10,6 +11,7 @@ declare var gapi: any;
 })
 export class YoutubeComponent implements OnInit, OnChanges, AfterViewInit {
   CLIENT_ID = '557232627676-7tvbo2nlvar3hgg2jav9ppilqtupg8f3.apps.googleusercontent.com';
+  CLIENT_ID_NEW = '557232627676-b1b9c5hknvlcvr1l4l5shunv4ubpdbsg.apps.googleusercontent.com';
 
   // Array of API discovery doc URLs for APIs used by the quickstart
   DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest"];
@@ -27,15 +29,16 @@ export class YoutubeComponent implements OnInit, OnChanges, AfterViewInit {
   imgUrl: string;
   
   constructor(private sharedService: AppService,
-              private cdRef: ChangeDetectorRef){
+              private cdRef: ChangeDetectorRef,
+              private winRef:WindowRef){
   }
 
   ngOnInit(){
   }
 
   ngAfterViewInit() {
-     this.authorizeButton = document.getElementById('authorize-button');
-     this.signoutButton = document.getElementById('signout-button');
+     this.authorizeButton = this.winRef.nativeWindow().document.getElementById('authorize-button');
+     this.signoutButton = this.winRef.nativeWindow().document.getElementById('signout-button');
      $('#search-button').attr('disabled', 'true');
      this.handleClientLoad();
   }
@@ -71,7 +74,7 @@ export class YoutubeComponent implements OnInit, OnChanges, AfterViewInit {
        initClient = () => {
         gapi.client.init({
           discoveryDocs: this.DISCOVERY_DOCS,
-          clientId: this.CLIENT_ID,
+          clientId: this.CLIENT_ID_NEW,
           scope: this.SCOPES
         }).then( () => {
           // Listen for sign-in state changes.
@@ -153,7 +156,7 @@ export class YoutubeComponent implements OnInit, OnChanges, AfterViewInit {
     this.prevPageToken = response.result.prevPageToken
     var prevVis = this.prevPageToken ? 'visible' : 'hidden';
     $('#prev-button').css('visibility', prevVis);
-
+     $('#video-container').empty();
     var playlistItems = response.result.items;
     if (playlistItems) {
       $.each(playlistItems, (index, item) => {
@@ -197,6 +200,7 @@ export class YoutubeComponent implements OnInit, OnChanges, AfterViewInit {
 
   request.execute((response) => {
     var str = JSON.stringify(response.result);
+     $('#search-container').empty();
     $.each(response.result.items, (index, item) => {
         item.snippet['resourceId'] = {}
         item.snippet['resourceId']['videoId'] = item.id.videoId;

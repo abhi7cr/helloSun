@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/Rx';
 import * as $ from 'jquery';
-
+import { WindowRef } from '../WindowRef';
 
 @Component({
   selector: 'ds-route-0',
@@ -19,7 +19,8 @@ import * as $ from 'jquery';
 export class WikiComponent implements AfterViewInit{
   title = 'I am the second component, part of the DSModule.Looks like you have set the input to:';
   name = '';
-  constructor(private sharedService: AppService){
+  constructor(private sharedService: AppService,
+              private winRef: WindowRef){
     sharedService.nameUpdated$.subscribe(updatedName => {
       this.name = updatedName;
     },
@@ -67,18 +68,15 @@ export class WikiComponent implements AfterViewInit{
          resultsList.empty();
          results.map(x => 
                       {
-                        let li = document.createElement('li');
+                        let li = this.winRef.nativeWindow().document.createElement('li');
                         li.innerText = x;
-                        let anchor = document.createElement('a');
-                        anchor.href = x;
-                        li.appendChild(anchor);
+                        // let anchor = document.createElement('a');
+                        // anchor.href = x;
+                        // li.appendChild(anchor);
                         resultsList.append(li);
                       });
       },
        (error) => {
-        // $results
-        //   .appendChild($('<li>'))
-        //   .text('Error:' + error);
       });
   
 

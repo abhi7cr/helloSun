@@ -42,4 +42,26 @@ export class AppService {
           return this.jsonp.get('http://en.wikipedia.org/w/api.php?callback=JSONP_CALLBACK', {search})
                  .map((request) => request.json()[1]);
     }
+
+    public getSpotifyTracks(url:string, code: string): Observable<any>{
+         let headers = new Headers();
+            headers.append('Authorization', 'Bearer ' + code);
+            headers.append('Accept', 'application/json');
+         return Observable.fromPromise(fetch(url, 
+                                {
+                                   headers: {'Authorization': 'Bearer ' + code}, 
+                                   method: 'GET', 
+                                   cache: 'default'
+                                 }));
+           
+            // let options = new RequestOptions({
+            // method: RequestMethod.Get,
+            // headers: headers
+
+      // return this.http.get(url, options)
+      //   .map((res: Response) => res.json())
+      //       .catch(this.handleError)
+    } 
+
+
 }

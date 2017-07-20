@@ -4,7 +4,7 @@ var express = require('express'),
 
 var app = express();
 var staticRoot = __dirname + '/dist';
-app.set('port', (process.env.PORT || 8081));
+app.set('port', (process.env.PORT || 1234));
 app.use(express.static(staticRoot));
 
 app.use(function(req, res, next){

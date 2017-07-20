@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {AppService} from './app.service';
+import { WindowRef } from './WindowRef';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,8 @@ export class AppComponent {
   val = '';
   classList = 'col-lg-4 col-xl-4 col-md-6 col-sm-6 col-12';
 
-  constructor(private sharedService: AppService){
+  constructor(private sharedService: AppService,
+              private winRef: WindowRef){
   }
 
   setName = () => this.sharedService.setName(this.val)
