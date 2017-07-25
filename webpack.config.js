@@ -83,7 +83,8 @@ module.exports = {
       "./src/polyfills.ts"
     ],
     "styles": [
-      "./src/styles.css"
+      "./src/styles.css",
+      "./src/bootstrapv4.css"
     ],
     "webworker":[
       "./src/webWorker/workerLoader.ts"
@@ -133,7 +134,8 @@ module.exports = {
       // },
       {
         "exclude": [
-          path.join(process.cwd(), "src\\styles.css")
+          path.join(process.cwd(), "src\\styles.css"),
+           path.join(process.cwd(), "src\\bootstrapv4.css")
         ],
         "test": /\.css$/,
         "use": [
@@ -156,7 +158,8 @@ module.exports = {
       },
       {
         "exclude": [
-          path.join(process.cwd(), "src\\styles.css")
+          path.join(process.cwd(), "src\\styles.css"),
+           path.join(process.cwd(), "src\\bootstrapv4.css")
         ],
         "test": /\.scss$|\.sass$/,
         "use": [
@@ -187,7 +190,8 @@ module.exports = {
       },
       {
         "exclude": [
-          path.join(process.cwd(), "src\\styles.css")
+          path.join(process.cwd(), "src\\styles.css"),
+          path.join(process.cwd(), "src\\bootstrapv4.css"),
         ],
         "test": /\.less$/,
         "use": [
@@ -216,7 +220,8 @@ module.exports = {
       },
       {
         "exclude": [
-          path.join(process.cwd(), "src\\styles.css")
+          path.join(process.cwd(), "src\\styles.css"),
+          path.join(process.cwd(), "src\\bootstrapv4.css")
         ],
         "test": /\.styl$/,
         "use": [
@@ -246,7 +251,8 @@ module.exports = {
       },
       {
         "include": [
-          path.join(process.cwd(), "src\\styles.css")
+          path.join(process.cwd(), "src\\styles.css"),
+          path.join(process.cwd(), "src\\bootstrapv4.css")
         ],
         "test": /\.css$/,
         "use": [
@@ -269,7 +275,8 @@ module.exports = {
       },
       {
         "include": [
-          path.join(process.cwd(), "src\\styles.css")
+          path.join(process.cwd(), "src\\styles.css"),
+          path.join(process.cwd(), "src\\bootstrapv4.css")
         ],
         "test": /\.scss$|\.sass$/,
         "use": [
@@ -300,7 +307,8 @@ module.exports = {
       },
       {
         "include": [
-          path.join(process.cwd(), "src\\styles.css")
+          path.join(process.cwd(), "src\\styles.css"),
+          path.join(process.cwd(), "src\\bootstrapv4.css")
         ],
         "test": /\.less$/,
         "use": [
@@ -329,7 +337,8 @@ module.exports = {
       },
       {
         "include": [
-          path.join(process.cwd(), "src\\styles.css")
+          path.join(process.cwd(), "src\\styles.css"),
+          path.join(process.cwd(), "src\\bootstrapv4.css")
         ],
         "test": /\.styl$/,
         "use": [

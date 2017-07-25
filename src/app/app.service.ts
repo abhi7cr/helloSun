@@ -10,7 +10,8 @@ export class AppService {
 
     // Observable string sources
     private nameUpdatedSource: BehaviorSubject<any> = new BehaviorSubject('');
-
+    broker: any = undefined;
+    _accessToken: string = undefined;
     // Observable string streams
     nameUpdated$ = this.nameUpdatedSource.asObservable();
 
@@ -26,6 +27,21 @@ export class AppService {
 
     private emitNameUpdatedEvent(name: string) {
         this.nameUpdatedSource.next(name);
+    }
+
+    public saveBroker(broker: any){
+          this.broker = broker;
+    }
+    public getBroker(){
+        return this.broker;
+    }
+
+    public get accessToken(){
+            return this._accessToken;
+    }
+
+    public set accessToken(accessToken){
+        this._accessToken = accessToken;
     }
 
     public handleError(error: Response) {

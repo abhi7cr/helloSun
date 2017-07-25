@@ -1,3 +1,8 @@
-<button class='btn btn-primary' (click)='authorize()'>Authorize Spotify</button>
-<strong>Your tracks:</strong> 
-<div id='spotify-me' #spotifyMe></div>
+<div class="container">
+<button class='btn btn-primary' (click)='authorize()' [hidden]="accessToken !== undefined">Authorize Spotify</button>
+<br/>
+<button class='btn btn-secondary' (click)='toggleTracks()'>Show/Hide Tracks</button>
+<br/>
+<strong>Your tracks:</strong><br/> 
+<div id='spotify-me' #spotifyMe [hidden]="!toggle_track"></div>
+</div>

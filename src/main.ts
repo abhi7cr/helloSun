@@ -16,24 +16,8 @@ bootstrapWorkerUi('../webworker.bundle.js', WORKER_UI_LOCATION_PROVIDERS)
 .then((ref: any)=> {
 	   let brokerFactory: ServiceMessageBrokerFactory = ref.injector.get(ServiceMessageBrokerFactory);
 	   let broker = brokerFactory.createMessageBroker(SPOTIFY_CHANNEL, false);
-   	   broker.registerMethod("authorize", [PRIMITIVE], (url: string) => window.location.assign(url), PRIMITIVE);
-	  // let brokerFactory: ClientMessageBrokerFactory = ref.injector.get(ClientMessageBrokerFactory);
-   //    let broker = brokerFactory.createMessageBroker(SPOTIFY_CHANNEL, false);
-
-   //    document.getElementById("authorize").addEventListener("click", (e) => {
-
-   //    //var val = (<HTMLInputElement>document.getElementById("factorial")).value;
-
-   //       var args = new UiArguments("authorize");
-   //    // args.method = "factorial";
-   //    // var fnArg = new FnArg(val, PRIMITIVE);
-   //    // fnArg.value = val;
-   //    // fnArg.type = PRIMITIVE;
-   //    // args.args = [fnArg];
-
-   //    broker.runOnService(args, PRIMITIVE)
-   //      .then((res: string) => {
-   //        window.location.assign(res);
-   //      });
-   //  });
+   	   broker.registerMethod("authorize", [PRIMITIVE], (url: string) =>{
+   	   		window.location.assign(url+'&redirect_uri='+ window.location.href), PRIMITIVE
+   	   	});
+   	
 });

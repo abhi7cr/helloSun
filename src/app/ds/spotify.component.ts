@@ -5,7 +5,7 @@ import { WindowRef } from '../WindowRef';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
 import * as $ from 'jquery';
-import {UiArguments, FnArg, PRIMITIVE, ClientMessageBrokerFactory, ClientMessageBroker} from '@angular/platform-webworker';
+import {UiArguments, FnArg, PRIMITIVE, ClientMessageBrokerFactory, ClientMessageBroker, MessageBus} from '@angular/platform-webworker';
 
 const SPOTIFY_CHANNEL = 'SPOTIFY';
 
@@ -24,17 +24,22 @@ export class SpotifyComponent implements OnInit, OnChanges {
   tracks: any;
   arguments: any[];
   broker: ClientMessageBroker;
+  accessToken: string;
+  toggle_track: boolean = true;
   @ViewChild('spotifyMe') spotifyMe: ElementRef;
   constructor(private sharedService: AppService, 
               private winRef: WindowRef,
               private router: Router,
               private renderer: Renderer2,
               private location: Location,
-              private _clientMessageBrokerFactory: ClientMessageBrokerFactory){
+              private _clientMessageBrokerFactory: ClientMessageBrokerFactory,
+              private _messageBus: MessageBus){
     this.type = 'info';
     this.name = '';
-    
-    this.broker = _clientMessageBrokerFactory.createMessageBroker(SPOTIFY_CHANNEL);
+    let savedBroker = this.sharedService.getBroker();
+    this.broker = savedBroker !== undefined? savedBroker :
+     _clientMessageBrokerFactory.createMessageBroker(SPOTIFY_CHANNEL);
+    this.sharedService.saveBroker(this.broker);
    
     sharedService.nameUpdated$.subscribe(updatedName => {
       this.name = updatedName;
@@ -43,27 +48,37 @@ export class SpotifyComponent implements OnInit, OnChanges {
     error => {
       console.log(error);
     });
-    if(router.url.includes('access_token')){
-      let code = router.url.split('access_token=')[1]
+    if(router.url.includes('access_token') || this.sharedService.accessToken !== undefined){
+     this.accessToken = this.sharedService.accessToken ||
+                                       router.url.split('access_token=')[1]
                                       .split('&token_type')[0];
-      let url = 'https://api.spotify.com/v1/me/tracks';
-      this.sharedService.getSpotifyTracks(url, code).subscribe( res => {
-           this.renderer.setValue(this.spotifyMe.nativeElement, '');
-           res.json().then((json) => {
+     this.sharedService.accessToken = this.accessToken;
+        this.getTracks();
+       }
+    }
+
+    toggleTracks = () => {
+      this.toggle_track = !this.toggle_track;
+    }
+
+    //Get user tracks from Spotify
+    getTracks = () => {
+            let url = 'https://api.spotify.com/v1/me/tracks';
+            this.sharedService.getSpotifyTracks(url, this.accessToken).subscribe( res => {
+            this.renderer.setValue(this.spotifyMe.nativeElement, '');
+            res.json().then((json) => {
                let tracks = Array(...json.items);
                 for(var i=0; i<tracks.length;i++){
                    this.displayResult(tracks[i]);
                  }
                });
-           })
-     }
+           });
     }
   
-
+  //Authorize Spotify user
   authorize = () => {  
         let url = 'https://accounts.spotify.com/authorize?';
-        let redirect_uri = this.router.url === '/ds/spotify'? 'http://localhost:1333' + this.router.url : this.router.url;
-        let query = 'response_type=token&client_id='+ this.client_id + '&scope=' + this.scopes + '&redirect_uri='+ redirect_uri;
+        let query = 'response_type=token&client_id='+ this.client_id + '&scope=' + this.scopes;
         let urlWithQueryString = url+'&'+query;
         this.arguments = [new FnArg(urlWithQueryString, PRIMITIVE)];
         var methodInfo = new UiArguments("authorize", this.arguments);
@@ -75,10 +90,10 @@ export class SpotifyComponent implements OnInit, OnChanges {
    displayResult(track_obj) {
   let title = track_obj.track.name;
   let preview_url = track_obj.track.preview_url;
-  let htmlString = title + '<br/><audio controls><source src="' + preview_url + '"></audio><br/>';
-    this.tracks = this.renderer.createElement('tracks');
-    this.renderer.setProperty(this.tracks, 'innerHTML',  htmlString);
-    this.renderer.appendChild(this.spotifyMe.nativeElement, this.tracks);
+  let htmlString = '<div style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 25px 20px 0 rgba(0, 0, 0, 0.19)"><img src="' + track_obj.track.album.images[0].url + '" width="200" height="200"/><p style="padding:10px;">Artist:' + track_obj.track.artists[0].name + '</p><div style="padding:10px;"><p>' + title + '</p><audio controls><source src="' + preview_url + '"></audio></div></div>';
+  this.tracks = this.renderer.createElement('tracks');
+  this.renderer.setProperty(this.tracks, 'innerHTML',  htmlString);
+  this.renderer.appendChild(this.spotifyMe.nativeElement, this.tracks);
 }
 
 
