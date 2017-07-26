@@ -1,5 +1,5 @@
 <div class="container">
-<button class='btn btn-primary' (click)='authorize()' [hidden]="accessToken !== undefined">Authorize Spotify</button>
+<button class='btn btn-primary' (click)='authorize()' [hidden]="accessToken !== undefined && accessToken !== null">Authorize Spotify</button>
 <br/>
 <button class='btn btn-secondary' (click)='toggleTracks()'>Show/Hide Tracks</button>
 <br/>

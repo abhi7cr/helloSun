@@ -5,7 +5,7 @@ import { WindowRef } from '../WindowRef';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
 import * as $ from 'jquery';
-import {UiArguments, FnArg, PRIMITIVE, ClientMessageBrokerFactory, ClientMessageBroker, MessageBus} from '@angular/platform-webworker';
+import {UiArguments, FnArg, PRIMITIVE, SerializerTypes, ClientMessageBrokerFactory, ClientMessageBroker, MessageBus} from '@angular/platform-webworker';
 
 const SPOTIFY_CHANNEL = 'SPOTIFY';
 
@@ -44,17 +44,43 @@ export class SpotifyComponent implements OnInit, OnChanges {
     sharedService.nameUpdated$.subscribe(updatedName => {
       this.name = updatedName;
       this.type = this.name === 'clicked'?'info':'success';
+      console.log(this.name);
     },
     error => {
       console.log(error);
     });
-    if(router.url.includes('access_token') || this.sharedService.accessToken !== undefined){
-     this.accessToken = this.sharedService.accessToken ||
+
+      if(router.url.includes('access_token') || this.accessToken !== undefined){
+              this.accessToken = this.accessToken ||
                                        router.url.split('access_token=')[1]
                                       .split('&token_type')[0];
-     this.sharedService.accessToken = this.accessToken;
-        this.getTracks();
-       }
+          //this.sharedService.accessToken = this.accessToken;
+          this.arguments = [new FnArg(this.accessToken, PRIMITIVE)];
+          let methodInfo = new UiArguments("setAccessToken", this.arguments);
+          let promise = this.broker.runOnService(methodInfo, PRIMITIVE);
+          promise.then(res => {
+            console.log(res);
+          });
+          this.getTracks();
+      }
+   
+    // (() => {
+    //   const promise1 = new Promise((resolve, reject) => {
+    //       resolve(123);
+    //   });
+    //   promise1.then((res) => {
+    //     console.log('I get called:', res === 123); // I get called: true
+    //   });
+    // })();
+   
+    let methodInfo = new UiArguments("getAccessToken");
+    let promise = this.broker.runOnService(methodInfo, PRIMITIVE);
+    promise.then(res => {
+           this.accessToken = res;
+           console.log(res);
+           if(this.accessToken !== null)
+            this.getTracks();
+      });
     }
 
     toggleTracks = () => {
@@ -88,12 +114,12 @@ export class SpotifyComponent implements OnInit, OnChanges {
   }
 
    displayResult(track_obj) {
-  let title = track_obj.track.name;
-  let preview_url = track_obj.track.preview_url;
-  let htmlString = '<div style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 25px 20px 0 rgba(0, 0, 0, 0.19)"><img src="' + track_obj.track.album.images[0].url + '" width="200" height="200"/><p style="padding:10px;">Artist:' + track_obj.track.artists[0].name + '</p><div style="padding:10px;"><p>' + title + '</p><audio controls><source src="' + preview_url + '"></audio></div></div>';
-  this.tracks = this.renderer.createElement('tracks');
-  this.renderer.setProperty(this.tracks, 'innerHTML',  htmlString);
-  this.renderer.appendChild(this.spotifyMe.nativeElement, this.tracks);
+    let title = track_obj.track.name;
+    let preview_url = track_obj.track.preview_url;
+    let htmlString = '<div style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 25px 20px 0 rgba(0, 0, 0, 0.19)"><img src="' + track_obj.track.album.images[0].url + '" width="200" height="200"/><p style="padding:10px;">Artist:' + track_obj.track.artists[0].name + '</p><div style="padding:10px;"><p>' + title + '</p><audio controls><source src="' + preview_url + '"></audio></div></div>';
+    this.tracks = this.renderer.createElement('tracks');
+    this.renderer.setProperty(this.tracks, 'innerHTML',  htmlString);
+    this.renderer.appendChild(this.spotifyMe.nativeElement, this.tracks);
 }
 
 
