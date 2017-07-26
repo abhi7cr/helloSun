@@ -68,7 +68,15 @@ export class AppService {
                                    headers: {'Authorization': 'Bearer ' + code}, 
                                    method: 'GET', 
                                    cache: 'default'
+                                
+
+                                 }).then(res => {
+                                  if(res.status === 401)
+                                    throw new Error('Unauthorized');
+                                  else 
+                                    return res;
                                  }));
+                          
            
             // let options = new RequestOptions({
             // method: RequestMethod.Get,

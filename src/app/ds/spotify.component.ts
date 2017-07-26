@@ -64,15 +64,17 @@ export class SpotifyComponent implements OnInit, OnChanges {
           this.getTracks();
       }
    
-    // (() => {
-    //   const promise1 = new Promise((resolve, reject) => {
-    //       resolve(123);
-    //   });
-    //   promise1.then((res) => {
-    //     console.log('I get called:', res === 123); // I get called: true
-    //   });
-    // })();
-   
+    let test = () => {
+      return new Promise<number>((resolve, reject) => {
+          resolve(123);
+      });
+    };
+
+     let prom = test();
+     prom.then((res) => {
+        console.log('I get called:', res === 123); // I get called: true
+     });
+
     let methodInfo = new UiArguments("getAccessToken");
     let promise = this.broker.runOnService(methodInfo, PRIMITIVE);
     promise.then(res => {
@@ -98,6 +100,9 @@ export class SpotifyComponent implements OnInit, OnChanges {
                    this.displayResult(tracks[i]);
                  }
                });
+           }, error => {
+             console.log(error);
+             this.authorize();
            });
     }
   
