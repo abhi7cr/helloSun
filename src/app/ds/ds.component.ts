@@ -8,7 +8,7 @@ import {AppService} from '../app.service';
   styleUrls: ['./ds.component.css']
 })
 export class DSComponent implements OnInit, OnChanges {
-  title = 'Welcome to DragonSpears Angular Guide (I am part of the DSComponent)';
+  title = 'Welcome to the Angular Guide (I am part of the DSComponent)';
   name: string;
   type: string;
   constructor(private sharedService: AppService){
